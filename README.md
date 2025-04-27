@@ -5,7 +5,7 @@ Jogo desenvolvido em C na disciplina de programação imperativa e funcional, qu
 Vinicius Cardoso Arimateia - **@vini-arima**   \
 Gustavo Magina - **@magina2**                  \
 João Paulo - **@Joaopaulomelo1**               \
-Matheus Guimarães - **@MatheusGGuimaraes**
+Mateus Guimarães - **@MateusGGuimaraes**
 
 **Programação Imperativa e Funcional - 2025.2** \
 **@CESAR School**

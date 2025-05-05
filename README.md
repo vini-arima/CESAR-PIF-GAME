@@ -16,3 +16,6 @@ Se o personagem cair na água ou for atropelado pelo carro perde e reinicia o jo
 
 
 # :video_game: Como Jogar
+Nesse jogo, você controla o sapo. Ele se movimenta usando as teclas WASD. \
+O objetivo do jogo é o personagem permanecer vivo o maior tempo possível  \
+quanto mais tempo o sapo sobreviver, melhor será a pontuação do jogador.

@@ -6,6 +6,10 @@
 #include <sys/time.h>     // necessário para gettimeofday
 #include <sys/select.h>   // necessário para fd_set e select
 #include "utils.h"
+#include "../include/utils.h"
+
+
+
 
 void limparTela() {
     printf("\033[H\033[J");

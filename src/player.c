@@ -1,59 +1,100 @@
 #include <stdlib.h>
 #include <string.h>
 #include "player.h"
-#include "map.h" // para ALTURA_MAPA, LARGURA_MAPA
+#include "map.h"
+#include "ranking.h"
+#include "screen.h"
 
 Player* criarPlayer(const char* nome) {
     Player* jogador = malloc(sizeof(Player));
-    strncpy(jogador->nome, nome, 49);
-    jogador->nome[49] = '\0';
+    if (!jogador) return NULL;
+
+    strncpy(jogador->nome, nome, TAM_NOME-1);
+    jogador->nome[TAM_NOME-1] = '\0';
     jogador->faseAtual = 1;
     jogador->x = 0;
     jogador->y = 0;
-    jogador->vidas = 3;
+    jogador->vidas = VIDAS_INICIAIS;
     jogador->pontos = 0;
     jogador->ativoBuff = 0;
     jogador->tempoBuff = 0;
     jogador->cooldownDano = 0;
+    jogador->invencivel = 0; // Inicializa invencibilidade
 
     return jogador;
 }
 
-
 void destruirPlayer(Player* jogador) {
-    if (jogador) {
-        free(jogador);
-    }
+    free(jogador); // free já verifica NULL
 }
 
 void moverPlayer(Player* p, char direcao, int limiteX, int limiteY) {
+    if (!p) return;
+
     switch (direcao) {
-        case 'w':
-        case 'W':
+        case 'w': case 'W':
             if (p->y > 0) {
                 p->y--;
-                p->pontos += (p->ativoBuff == 2) ? 2 : 1;
+                p->pontos += (p->ativoBuff == BUFF_DOBRA_PONTOS) ? 2 : 1;
             }
             break;
-        case 'a':
-        case 'A':
+        case 'a': case 'A':
             if (p->x > 0) p->x--;
             break;
-        case 'd':
-        case 'D':
+        case 'd': case 'D':
             if (p->x < limiteX - 1) p->x++;
+            break;
+        case 's': case 'S': // Adicionei movimento para baixo (opcional)
+            if (p->y < limiteY - 1) p->y++;
             break;
     }
 }
+
+void aplicarBuff(Player* p, int tipoBuff, int duracao) {
+    if (!p) return;
+    
+    p->ativoBuff = tipoBuff;
+    p->tempoBuff = duracao;
+    
+    if (tipoBuff == BUFF_INVENCIVEL) {
+        p->invencivel = 1;
+    }
+}
+
+void tomarDano(Player* p) {
+    if (!p || p->invencivel || p->cooldownDano > 0) return;
+
+    p->vidas--;
+    p->cooldownDano = 3; // Cooldown de 3 frames
+    
+    if (p->vidas <= 0) {
+        finalizarJogo(p);
+    }
+}
+
 void atualizarBuff(Player* p) {
+    if (!p) return;
+
     if (p->ativoBuff != 0) {
         p->tempoBuff--;
         if (p->tempoBuff <= 0) {
             p->ativoBuff = 0;
+            p->invencivel = 0;
         }
     }
+    
     if (p->cooldownDano > 0) {
         p->cooldownDano--;
     }
 }
 
+void finalizarJogo(Player* p) {
+    if (!p) return;
+    
+    // Salva apenas se o jogador tiver pontos
+    if (p->pontos > 0) {
+        salvarPontuacao(p->nome, p->pontos);
+    }
+    
+    // Adicione aqui qualquer efeito visual/sonoro de game over
+}

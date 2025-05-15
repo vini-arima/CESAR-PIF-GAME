@@ -67,6 +67,34 @@ void exibirMenu() {
     screenShowCursor();
 }
 
+// Nova função para entrada segura de nomes
+void obterNomeJogador(char nome[]) {
+    screenClear();
+    screenGotoxy(MINX + 20, MINY + 5);
+    screenSetColor(LIGHTCYAN, -1);
+    printf("Digite seu nome: ");
+    screenSetNormal();
+    
+    fgets(nome, 50, stdin);
+    nome[strcspn(nome, "\n")] = '\0';
+    
+    if (strlen(nome) == 0) {
+        strncpy(nome, "Jogador", 49);
+        nome[49] = '\0';
+    }
+}
+
+// Nova função para tratamento de erros
+int lerOpcao() {
+    int opcao;
+    if (scanf("%d", &opcao) != 1) {
+        while (getchar() != '\n');
+        return -1;
+    }
+    getchar();
+    return opcao;
+}
+
 int main() {
     int opcao;
     char nome[50];
@@ -75,38 +103,25 @@ int main() {
 
     while (1) {
         exibirMenu();
-
-        if (scanf("%d", &opcao) != 1) {
-            while (getchar() != '\n');
-            opcao = -1;
-        }
-        getchar();
+        opcao = lerOpcao();
 
         switch (opcao) {
             case 1:
-                screenClear();
-                screenGotoxy(MINX + 20, MINY + 5);
-                screenSetColor(LIGHTCYAN, -1);
-                printf("Digite seu nome: ");
-                screenSetNormal();
-                fgets(nome, sizeof(nome), stdin);
-                nome[strcspn(nome, "\n")] = 0;
-                if (strlen(nome) == 0) strcpy(nome, "Jogador");
+                obterNomeJogador(nome);
                 iniciarJogo(nome);
                 break;
+                
             case 2:
-                screenClear();
-                exibirRanking();
-                screenGotoxy(MINX+15, MAXY-2);
-                printf("Pressione ENTER para voltar...");
-                while (getchar() != '\n');
-                break;
+    screenClear();
+    mostrarRanking(); // A função já contém toda a lógica de exibição e entrada
+    break; // Simplesmente chama e volta quando a função terminar
+
             case 3:
-                salvarRanking();
                 screenGotoxy(MINX+25, MAXY-2);
                 printf("Até logo! 👋");
                 screenDestroy();
                 exit(0);
+                
             default:
                 screenGotoxy(MINX+15, MAXY-2);
                 printf("Opção inválida! Pressione ENTER...");

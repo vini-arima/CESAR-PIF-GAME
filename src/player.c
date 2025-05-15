@@ -7,7 +7,7 @@ Player* criarPlayer(const char* nome) {
     Player* jogador = malloc(sizeof(Player));
     strncpy(jogador->nome, nome, 49);
     jogador->nome[49] = '\0';
-
+    jogador->faseAtual = 1;
     jogador->x = 0;
     jogador->y = 0;
     jogador->vidas = 3;

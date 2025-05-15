@@ -4,6 +4,7 @@
 #include "map.h"
 #include "utils.h"
 #include "obstacles.h"
+#include "screen.h"
 
 #define COOLDOWN_MAX 3
 int cooldownLinha[100];
@@ -12,8 +13,9 @@ Mapa* criarMapa() {
     Mapa* m = malloc(sizeof(Mapa));
     int termAltura, termLargura;
     getTerminalSize(&termAltura, &termLargura);
-    m->altura = (termAltura - 10) / 2;
-    m->largura = termLargura / 3;
+
+    m->altura = (termAltura - 16);  // ajuste mais conservador para garantir visibilidade total
+    m->largura = 20;                // formato mais vertical
     m->linhas = malloc(sizeof(TipoTerreno) * m->altura);
     m->obstaculos = malloc(sizeof(Obstaculo*) * MAX_OBSTACULOS);
     m->numObstaculos = 0;
@@ -117,12 +119,13 @@ void avancarFase(Mapa* m, Player* p) {
     p->x = m->largura / 2;
     p->y = m->altura - 1;
     p->pontos++;
+    p->faseAtual++;  
 }
 
 void renderizarMapa(Mapa* m, Player* p) {
     limparTela();
 
-    printf("Fase Atual: %d\n", p->pontos + 1);
+    printf("Fase Atual: %d\n", p->faseAtual);
     printf("🐸 %s | ❤️ Vidas: %d | ⭐ Pontos: %d", p->nome, p->vidas, p->pontos);
     if (p->ativoBuff == 1)
         printf(" | 🛡️ Invencibilidade (%ds)", p->tempoBuff);
@@ -130,7 +133,13 @@ void renderizarMapa(Mapa* m, Player* p) {
         printf(" | ✨ Dobra Pontos (%ds)", p->tempoBuff);
     printf("\n");
 
+    int termAltura, termLargura;
+    getTerminalSize(&termAltura, &termLargura);
+    int offsetX = (termLargura - (m->largura * 2)) / 2;
+
     for (int y = 0; y < m->altura; y++) {
+        screenGotoxy(offsetX, y + 2);  // agora o mapa começa mais acima
+
         TipoTerreno tipo = m->linhas[y];
         for (int x = 0; x < m->largura; x++) {
             int desenhado = 0;

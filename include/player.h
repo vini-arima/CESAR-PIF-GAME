@@ -8,7 +8,8 @@ typedef struct {
     int pontos;
     int ativoBuff;
     int tempoBuff;
-    int cooldownDano;  // <- adicione esse campo
+    int cooldownDano;  
+    int faseAtual;  
 } Player;
 
 Player* criarPlayer(const char* nome);

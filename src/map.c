@@ -17,8 +17,8 @@ Mapa* criarMapa() {
     int margemSuperior = 5;
     int margemInferior = 4;
     m->altura = termAltura - margemSuperior - margemInferior;
-    if (m->altura > 20) m->altura = 20;  // limite visual opcional
-    m->largura = 20;                // formato mais vertical
+    if (m->altura > 20) m->altura = 20;
+    m->largura = 20;
     m->linhas = malloc(sizeof(TipoTerreno) * m->altura);
     m->obstaculos = malloc(sizeof(Obstaculo*) * MAX_OBSTACULOS);
     m->numObstaculos = 0;
@@ -122,7 +122,7 @@ void avancarFase(Mapa* m, Player* p) {
     p->x = m->largura / 2;
     p->y = m->altura - 1;
     p->pontos++;
-    p->faseAtual++;  
+    p->faseAtual++;
 }
 
 void renderizarMapa(Mapa* m, Player* p) {
@@ -141,43 +141,47 @@ void renderizarMapa(Mapa* m, Player* p) {
     int offsetX = (termLargura - (m->largura * 2)) / 2;
 
     for (int y = 0; y < m->altura; y++) {
-        screenGotoxy(offsetX, y + 2);  // área de jogo começa mais abaixo
-
+        screenGotoxy(offsetX, y + 2);
         TipoTerreno tipo = m->linhas[y];
         for (int x = 0; x < m->largura; x++) {
             int desenhado = 0;
 
-            // Buff visível
             if (m->buffAtual.ativo && m->buffAtual.x == x && m->buffAtual.y == y) {
-                printf(m->buffAtual.tipo == 1 ? "🛡️" : "✨");
+                if (tipo == RUA)
+                    printf("\033[33;42m%s\033[0m", m->buffAtual.tipo == 1 ? "🛡️" : "✨");
+                else
+                    printf("\033[34;44m%s\033[0m", m->buffAtual.tipo == 1 ? "🛡️" : "✨");
                 desenhado = 1;
             }
 
-            // Obstáculo visível
             for (int i = 0; !desenhado && i < m->numObstaculos; i++) {
                 Obstaculo* o = m->obstaculos[i];
                 if (o->x == x && o->y == y) {
-                    printf("%s", emojiObstaculo(o->tipo));
-                    desenhado = 1;
+                    if (tipo == RUA)
+                        printf("\033[33;42m%s\033[0m", emojiObstaculo(o->tipo));  // Marrom sobre verde (era CAMPO)
+                else        
+                        printf("\033[34;44m%s \033[0m", emojiObstaculo(o->tipo));  // Azul sobre azul (era RUA)
+                        desenhado = 1;
                 }
             }
 
-            // Jogador visível
             if (!desenhado && x == p->x && y == p->y) {
-                printf("🐸");
+                if (tipo == RUA)
+                    printf("\033[33;42m🐸\033[0m");
+                else
+                    printf("\033[34;44m🐸\033[0m");
                 desenhado = 1;
             }
 
-            // Terreno colorido (fundo)
             if (!desenhado) {
                 if (tipo == RUA) {
-                    screenSetColor(WHITE, GREEN);  // fundo verde
-                    printf("  ");
+                    if (y % 3 == 1)
+                        printf("\033[90;42m──\033[0m");
+                    else
+                        printf("\033[33;42m  \033[0m");
                 } else {
-                    screenSetColor(WHITE, BLUE);   // fundo azul
-                    printf("  ");
+                    printf("\033[34;44m~~\033[0m");
                 }
-                screenSetColor(WHITE, -1);  // restaura cor
             }
         }
         printf("\n");

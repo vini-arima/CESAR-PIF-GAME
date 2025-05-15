@@ -35,7 +35,7 @@ void destruirObstaculo(Obstaculo* o) {
 }
 
 const char* emojiObstaculo(TipoObstaculo tipo) {
-    return (tipo == CARRO) ? "🚗" : "🪵";
+    return (tipo == CARRO) ? "🐍" : "🪵";
 }
 
 int verificarColisaoComObstaculoMapa(Mapa* mapa, int x, int y, int invencivel) {

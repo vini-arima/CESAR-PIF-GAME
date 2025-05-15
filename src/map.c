@@ -146,13 +146,20 @@ void renderizarMapa(Mapa* m, Player* p) {
         for (int x = 0; x < m->largura; x++) {
             int desenhado = 0;
 
-            if (m->buffAtual.ativo && m->buffAtual.x == x && m->buffAtual.y == y) {
-                if (tipo == RUA)
-                    printf("\033[33;42m%s\033[0m", m->buffAtual.tipo == 1 ? "🛡️" : "✨");
-                else
-                    printf("\033[34;44m%s\033[0m", m->buffAtual.tipo == 1 ? "🛡️" : "✨");
-                desenhado = 1;
-            }
+       if (m->buffAtual.ativo && m->buffAtual.x == x && m->buffAtual.y == y) {
+    if (tipo == RUA) {
+        if (m->buffAtual.tipo == 1)  // 🛡️ ocupa só 1 coluna
+            printf("\033[33;42m🛡️ \033[0m");
+        else                         // ✨ já ocupa 2 colunas
+            printf("\033[33;42m✨\033[0m");
+    } else {
+        if (m->buffAtual.tipo == 1)
+            printf("\033[34;44m🛡️ \033[0m");
+        else
+            printf("\033[34;44m✨\033[0m");
+    }
+    desenhado = 1;
+}
 
             for (int i = 0; !desenhado && i < m->numObstaculos; i++) {
                 Obstaculo* o = m->obstaculos[i];

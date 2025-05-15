@@ -7,7 +7,7 @@
 #include "../include/screen.h"
 
 void imprimirTitulo() {
-    screenSetColor(LIGHTGREEN, -1);  // Título verde claro sem fundo
+    screenSetColor(LIGHTGREEN, -1);
     screenGotoxy(MINX+10, MINY+2);
     printf("███████╗██████╗  ██████╗  ██████╗  ██████╗ ███████╗██████╗ ");
     screenGotoxy(MINX+10, MINY+3);
@@ -24,7 +24,7 @@ void imprimirTitulo() {
 }
 
 void imprimirSapo() {
-    screenSetNormal();  // Sapo na cor padrão
+    screenSetNormal();
     screenGotoxy(MINX+19, MINY+12);
     printf("              _         _");
     screenGotoxy(MINX+19, MINY+13);
@@ -32,37 +32,35 @@ void imprimirSapo() {
     screenGotoxy(MINX+19, MINY+14);
     printf(" ( _`.'. -   'o` )   ( 'o`   - .`.'_ )");
     screenGotoxy(MINX+19, MINY+15);
-    printf(" _\\.'_'      _.-'     `-._      `_`./_");
+    printf(" _\.'_'      _.-'     `-._      `_`./_");
     screenGotoxy(MINX+19, MINY+16);
-    printf("( \\`. )    //\\`         '/\\\\    ( .'/ )");
+    printf("( \`. )    //\`         '/\\    ( .'/ )");
     screenGotoxy(MINX+19, MINY+17);
-    printf(" \\_`-'`---'\\\\__,       ,__//`---'`-'_/");
+    printf(" \_`-'`---'\\__,       ,__//`---'`-'_/");
     screenGotoxy(MINX+19, MINY+18);
-    printf("  \\`        `-\\         /-'        '/");
+    printf("  \`        `-\         /-'        '/'");
     screenGotoxy(MINX+19, MINY+19);
     printf("   `                               '");
 }
 
 void exibirMenu() {
-    screenInit(1);  // Inicializa com bordas
-    
+    screenInit(1);
     imprimirTitulo();
-    
-    // Opções do menu com números amarelos
+
     screenGotoxy(MINX+30, MINY+9);
     screenSetColor(YELLOW, -1);
     printf("1. Iniciar Jogo 🎮");
-    
+
     screenGotoxy(MINX+30, MINY+10);
     screenSetColor(YELLOW, -1);
     printf("2. Ver Ranking 🏆");
-    
+
     screenGotoxy(MINX+30, MINY+11);
     screenSetColor(YELLOW, -1);
     printf("3. Sair 🚪");
-    
+
     imprimirSapo();
-    
+
     screenGotoxy(MINX+29, MINY+21);
     screenSetColor(LIGHTCYAN, -1);
     printf("Escolha uma opção: ");
@@ -71,12 +69,13 @@ void exibirMenu() {
 
 int main() {
     int opcao;
+    char nome[50];
     srand(time(NULL));
     inicializarRanking();
 
     while (1) {
         exibirMenu();
-        
+
         if (scanf("%d", &opcao) != 1) {
             while (getchar() != '\n');
             opcao = -1;
@@ -86,7 +85,14 @@ int main() {
         switch (opcao) {
             case 1:
                 screenClear();
-                iniciarJogo();
+                screenGotoxy(MINX + 20, MINY + 5);
+                screenSetColor(LIGHTCYAN, -1);
+                printf("Digite seu nome: ");
+                screenSetNormal();
+                fgets(nome, sizeof(nome), stdin);
+                nome[strcspn(nome, "\n")] = 0;
+                if (strlen(nome) == 0) strcpy(nome, "Jogador");
+                iniciarJogo(nome);
                 break;
             case 2:
                 screenClear();

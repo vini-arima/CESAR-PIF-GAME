@@ -14,9 +14,7 @@
 
 static struct termios original_termios;
 
-void iniciarJogo() {
-    char nome[50] = "Jogador";
-
+void iniciarJogo(const char* nome) {
     Player* jogador = criarPlayer(nome);
     Mapa* mapa = criarMapa();
 

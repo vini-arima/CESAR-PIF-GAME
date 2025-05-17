@@ -11,11 +11,10 @@ Mateus Guimarães - **@MateusGGuimaraes**
 **@CESAR School**
 
 # :frog: Froggy Game
-O jogo Sapo consiste em desviar dos carros e pular nas plataformas flutuantes, você controla o Sapo pelo WSD. \
-Se o personagem cair na água ou for atropelado pelo carro perde e reinicia o jogo. 
+O jogo Sapo consiste em desviar das cobras e não colidir com os troncos, você controla o Sapo pelo WSD. \
 
 
 # :video_game: Como Jogar
 Nesse jogo, você controla o sapo. Ele se movimenta usando as teclas WASD. \
-O objetivo do jogo é o personagem permanecer vivo o maior tempo possível  \
+O objetivo do jogo é o personagem chegar o mais longe possível  \
 quanto mais tempo o sapo sobreviver, melhor será a pontuação do jogador.

@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>          // Para usleep e manipulação do terminal
-#include <termios.h>         // Para configurar entrada do teclado
-#include <fcntl.h>           // Para kbhit (tecla sem bloqueio)
+#include <unistd.h>          // Para usleep
 #include <sys/time.h>        // Para controle de tempo com gettimeofday
 #include "game.h"
 #include "map.h"
@@ -10,11 +8,10 @@
 #include "utils.h"
 #include "ranking.h"
 #include "obstacles.h"
+#include "keyboard.h"        // Nova inclusão: substitui manipulação direta do terminal
 
 #define FRAME_DELAY_MS 100   // Intervalo de atualização do jogo (100ms por frame)
 #define W_COOLDOWN_MS 65     // Delay para evitar múltiplos 'w' seguidos
-
-static struct termios original_termios; // Para armazenar configuração original do terminal
 
 // Função principal que executa o loop do jogo
 void iniciarJogo(const char* nome) {
@@ -26,12 +23,8 @@ void iniciarJogo(const char* nome) {
     jogador->x = mapa->largura / 2;
     jogador->y = mapa->altura - 1;
 
-    // Configura o terminal para modo não-canônico (leitura de tecla sem ENTER)
-    struct termios newt;
-    tcgetattr(STDIN_FILENO, &original_termios); // Salva configurações atuais
-    newt = original_termios;
-    newt.c_lflag &= ~(ICANON | ECHO);           // Desativa entrada canônica e eco de caracteres
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);    // Aplica nova configuração
+    // Configura o teclado para modo não-canônico (leitura de tecla sem ENTER)
+    keyboardInit(); // Substitui configuração manual do terminal com termios
 
     long last_update = get_current_time_ms();   // Armazena tempo do último frame
     long last_w_press = 0;                      // Tempo do último 'w' pressionado
@@ -42,8 +35,8 @@ void iniciarJogo(const char* nome) {
         long now = get_current_time_ms();       // Tempo atual
 
         // Verifica se uma tecla foi pressionada
-        if (kbhit()) {
-            char input = getchar();             // Lê a tecla pressionada
+        if (keyhit()) {                         // Substitui kbhit()
+            char input = readch();              // Substitui getchar()
 
             // Controle para impedir múltiplos 'w' seguidos rapidamente
             if (input == 'w' || input == 'W') {
@@ -55,7 +48,6 @@ void iniciarJogo(const char* nome) {
             } else {
                 // Outras teclas: movimentação normal
                 if (input == 'a' || input == 'A' || 
-                    input == 's' || input == 'S' || 
                     input == 'd' || input == 'D') {
                     moverPlayer(jogador, input, mapa->largura, mapa->altura);
                 }
@@ -107,10 +99,14 @@ void iniciarJogo(const char* nome) {
 
     // Fim do jogo: renderiza a última tela e exibe mensagem
     renderizarMapa(mapa, jogador);
-    printf("\n💀 Fim de jogo! Pontuação: %d\n", jogador->pontos);
+    renderizarMapa(mapa, jogador);
+
+    // Move o cursor para a última linha da tela (ajuste conforme altura do mapa)
+    printf("\033[%d;1H", mapa->altura + 3); // Move para linha abaixo do mapa
+    printf("💀 Fim de jogo! Pontuação: %d\n", jogador->pontos);
     printf("Pressione Enter para continuar...");
-    while (getchar() != '\n'); // Espera Enter para sair
-    getchar();
+    fflush(stdout); // Força a exibição imediata de tudo que foi enviado ao terminal (stdout)
+    while (readch() != '\n'); // Espera Enter para sair
 
     // Salva pontuação no ranking
     salvarPontuacao(jogador->nome, jogador->pontos);
@@ -118,5 +114,5 @@ void iniciarJogo(const char* nome) {
     // Libera memória e restaura terminal
     destruirMapa(mapa);
     destruirPlayer(jogador);
-    tcsetattr(STDIN_FILENO, TCSANOW, &original_termios); // Restaura configuração original do terminal
+    keyboardDestroy(); // Restaura configuração original do terminal
 }

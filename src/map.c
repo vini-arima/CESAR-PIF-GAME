@@ -129,15 +129,15 @@ void avancarFase(Mapa* m, Player* p) {
 void renderizarMapa(Mapa* m, Player* p) {
     limparTela();
 
-    // Obter tamanho do terminal
+    
     int termAltura, termLargura;
     getTerminalSize(&termAltura, &termLargura);
     
-    // Calcular centralização (cada célula do mapa = 2 caracteres)
+    
     int larguraMapa = m->largura * 2;
     int offsetCentral = (termLargura - larguraMapa) / 2;
 
-    // Formatar cabeçalho
+ 
     char linha1[50], linha2[100];
     snprintf(linha1, sizeof(linha1), "Fase Atual: %d", p->faseAtual);
     
@@ -152,28 +152,28 @@ void renderizarMapa(Mapa* m, Player* p) {
                 p->nome, p->vidas, p->pontos);
     }
 
-    // Imprimir cabeçalho centralizado com fundo preto
+    
     screenSetColor(WHITE, BLACK);
     
-    // Centralizar "Fase Atual" exatamente sobre o mapa
+    
     screenGotoxy(offsetCentral + (larguraMapa - strlen(linha1)) / 2, 1);
     printf("%s", linha1);
     
-    // Centralizar linha de status
+  
     screenGotoxy(offsetCentral + (larguraMapa ) / 26, 2);
     printf("%s", linha2);
     
-    screenSetColor(LIGHTGRAY, -1); // Resetar cores
+    screenSetColor(LIGHTGRAY, -1);
 
-    // Renderizar mapa centralizado
+  
     for (int y = 0; y < m->altura; y++) {
-        screenGotoxy(offsetCentral, y + 4); // +4 para espaço do cabeçalho
+        screenGotoxy(offsetCentral, y + 4);
         
         TipoTerreno tipo = m->linhas[y];
         for (int x = 0; x < m->largura; x++) {
             int desenhado = 0;
 
-            // Desenhar buffs
+            
             if (m->buffAtual.ativo && m->buffAtual.x == x && m->buffAtual.y == y) {
                 if (tipo == RUA) {
                     if (m->buffAtual.tipo == 1)
@@ -189,7 +189,7 @@ void renderizarMapa(Mapa* m, Player* p) {
                 desenhado = 1;
             }
 
-            // Desenhar obstáculos
+
             for (int i = 0; !desenhado && i < m->numObstaculos; i++) {
                 Obstaculo* o = m->obstaculos[i];
                 if (o->x == x && o->y == y) {
@@ -201,7 +201,7 @@ void renderizarMapa(Mapa* m, Player* p) {
                 }
             }
 
-            // Desenhar jogador
+           
             if (!desenhado && x == p->x && y == p->y) {
                 if (tipo == RUA)
                     printf("\033[33;42m🐸\033[0m");
@@ -210,7 +210,7 @@ void renderizarMapa(Mapa* m, Player* p) {
                 desenhado = 1;
             }
 
-            // Desenhar terreno
+           
             if (!desenhado) {
                 if (tipo == RUA) {
                     if (y % 3 == 1)

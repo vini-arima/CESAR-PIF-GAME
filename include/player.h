@@ -9,8 +9,8 @@
 #define VIDAS_INICIAIS 3
 
 
-#define BUFF_INVENCIVEL 1     // Buff que impede o jogador de tomar dano
-#define BUFF_DOBRA_PONTOS 2   // Buff que dobra os pontos adquiridos
+#define BUFF_INVENCIVEL 1    
+#define BUFF_DOBRA_PONTOS 2  
 
 
 typedef struct {

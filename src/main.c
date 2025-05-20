@@ -1,6 +1,7 @@
 #include <stdio.h>      
 #include <stdlib.h>    
-#include <time.h>       
+#include <string.h>
+#include <time.h>        
 #include "../include/game.h"      
 #include "../include/ranking.h"   
 #include "../include/utils.h"     
@@ -83,7 +84,7 @@ void obterNomeJogador(char nome[]) {
     screenSetNormal();
 
     fgets(nome, 50, stdin);         
-    nome[strcspn(nome, "\n")] = '\0'; /
+    nome[strcspn(nome, "\n")] = '\0'; 
 
    
     if (strlen(nome) == 0) {

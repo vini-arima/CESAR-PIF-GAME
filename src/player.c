@@ -37,6 +37,7 @@ void moverPlayer(Player* p, char direcao, int limiteX, int limiteY) {
     if (!p) return;
 
     switch (direcao) {
+        (void)limiteY;  
         case 'w': case 'W':
             if (p->y > 0) {
                 p->y--; 

@@ -138,7 +138,7 @@ void renderizarMapa(Mapa* m, Player* p) {
     int offsetCentral = (termLargura - larguraMapa) / 2;
 
  
-    char linha1[50], linha2[100];
+    char linha1[50], linha2[200];
     snprintf(linha1, sizeof(linha1), "Fase Atual: %d", p->faseAtual);
     
     if (p->ativoBuff == 1) {

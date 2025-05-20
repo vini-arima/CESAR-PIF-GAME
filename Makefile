@@ -5,8 +5,7 @@ CFLAGS = -Wall -Wextra -Iinclude
 
 SRC_DIR = src
 OBJ_DIR = build
-BIN = frogger
-
+BIN = $(OBJ_DIR)/frogger
 
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
@@ -24,4 +23,4 @@ run: all
 	./$(BIN)
 
 clean:
-	rm -rf $(OBJ_DIR) $(BIN)
+	rm -rf $(OBJ_DIR)

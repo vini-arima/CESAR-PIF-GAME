@@ -17,4 +17,4 @@ O jogo Sapo consiste em desviar das cobras e não colidir com os troncos, você 
 # :video_game: Como Jogar
 Nesse jogo, você controla o sapo. Ele se movimenta usando as teclas WASD. \
 O objetivo do jogo é o personagem chegar o mais longe possível  \
-quanto mais tempo o sapo sobreviver, melhor será a pontuação do jogador.
+quanto mais tempo o sapo sobreviver, maior será a pontuação do jogador.

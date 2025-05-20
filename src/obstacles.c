@@ -39,7 +39,7 @@ void destruirObstaculo(Obstaculo* o) {
 
 
 const char* emojiObstaculo(TipoObstaculo tipo) {
-    return (tipo == CARRO) ? "🐍" : "🪵";  
+    return (tipo == COBRA) ? "🐍" : "🪵";  
 }
 
 

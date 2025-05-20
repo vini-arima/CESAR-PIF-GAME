@@ -10,8 +10,8 @@
 #define MAX_OBSTACULOS 100
 
 typedef enum {
-    RUA,        
-    CAMPO_VERDE 
+    CAMPOVERDE, 
+    AGUA         
 } TipoTerreno;
 
 
@@ -23,13 +23,15 @@ typedef struct {
 
 
 typedef struct Mapa {
-    int altura;                   
-    int largura;                  
-    TipoTerreno* linhas;         
-    Obstaculo** obstaculos;      
-    int numObstaculos;           
-    Buff buffAtual;              
-    int fasesDesdeUltimoBuff;   
+    int largura;
+    int altura;
+    TipoTerreno* linhas;
+
+    Obstaculo** obstaculos;
+    int numObstaculos;
+
+    Buff buffAtual;
+    int fasesDesdeUltimoBuff;
 } Mapa;
 
 

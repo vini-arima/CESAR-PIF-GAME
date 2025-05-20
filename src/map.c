@@ -28,7 +28,7 @@ Mapa* criarMapa() {
 
     srand(time(NULL));
     for (int i = 0; i < m->altura; i++) {
-        m->linhas[i] = (rand() % 2 == 0) ? CAMPO_VERDE : RUA;
+        m->linhas[i] = (rand() % 2 == 0) ? AGUA : CAMPOVERDE;
         cooldownLinha[i] = 0;
     }
 
@@ -36,7 +36,7 @@ Mapa* criarMapa() {
 }
 
 void gerarLinha(Mapa* m, int linha) {
-    m->linhas[linha] = (rand() % 2 == 0) ? CAMPO_VERDE : RUA;
+    m->linhas[linha] = (rand() % 2 == 0) ? AGUA : CAMPOVERDE;
     cooldownLinha[linha] = 0;
 }
 
@@ -55,7 +55,7 @@ void gerarObstaculos(Mapa* m) {
 
         if ((rand() % 100) < 3 && m->numObstaculos < MAX_OBSTACULOS) {
             TipoTerreno terreno = m->linhas[y];
-            TipoObstaculo tipo = (terreno == RUA) ? CARRO : TRONCO;
+            TipoObstaculo tipo = (terreno == CAMPOVERDE) ? COBRA : TRONCO;
 
             Obstaculo* o = criarObstaculo(y, tipo, m->largura);
             if (o) {
@@ -158,9 +158,7 @@ void renderizarMapa(Mapa* m, Player* p) {
     
     screenGotoxy(offsetCentral + (larguraMapa - strlen(linha1)) / 2, 1);
     printf("%s", linha1);
-    
-  
-    screenGotoxy(offsetCentral + (larguraMapa ) / 26, 2);
+    screenGotoxy(offsetCentral + (larguraMapa) / 26, 2);
     printf("%s", linha2);
     
     screenSetColor(LIGHTGRAY, -1);
@@ -170,21 +168,16 @@ void renderizarMapa(Mapa* m, Player* p) {
         screenGotoxy(offsetCentral, y + 4);
         
         TipoTerreno tipo = m->linhas[y];
+
         for (int x = 0; x < m->largura; x++) {
             int desenhado = 0;
 
             
             if (m->buffAtual.ativo && m->buffAtual.x == x && m->buffAtual.y == y) {
-                if (tipo == RUA) {
-                    if (m->buffAtual.tipo == 1)
-                        printf("\033[33;42m🛡️ \033[0m");
-                    else
-                        printf("\033[33;42m✨\033[0m");
+                if (tipo == CAMPOVERDE) {
+                    printf("\033[33;42m%s\033[0m", m->buffAtual.tipo == 1 ? "🛡️ " : "✨");
                 } else {
-                    if (m->buffAtual.tipo == 1)
-                        printf("\033[34;44m🛡️ \033[0m");
-                    else
-                        printf("\033[34;44m✨\033[0m");
+                    printf("\033[34;44m%s\033[0m", m->buffAtual.tipo == 1 ? "🛡️ " : "✨");
                 }
                 desenhado = 1;
             }
@@ -193,9 +186,9 @@ void renderizarMapa(Mapa* m, Player* p) {
             for (int i = 0; !desenhado && i < m->numObstaculos; i++) {
                 Obstaculo* o = m->obstaculos[i];
                 if (o->x == x && o->y == y) {
-                    if (tipo == RUA)
+                    if (tipo == CAMPOVERDE)
                         printf("\033[33;42m%s\033[0m", emojiObstaculo(o->tipo));
-                    else        
+                    else
                         printf("\033[34;44m%s \033[0m", emojiObstaculo(o->tipo));
                     desenhado = 1;
                 }
@@ -203,7 +196,7 @@ void renderizarMapa(Mapa* m, Player* p) {
 
            
             if (!desenhado && x == p->x && y == p->y) {
-                if (tipo == RUA)
+                if (tipo == CAMPOVERDE)
                     printf("\033[33;42m🐸\033[0m");
                 else
                     printf("\033[34;44m🐸\033[0m");
@@ -212,7 +205,7 @@ void renderizarMapa(Mapa* m, Player* p) {
 
            
             if (!desenhado) {
-                if (tipo == RUA) {
+                if (tipo == CAMPOVERDE) {
                     if (y % 3 == 1)
                         printf("\033[90;42m──\033[0m");
                     else

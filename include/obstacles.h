@@ -7,18 +7,18 @@ struct Mapa;
 typedef struct Mapa Mapa;
 
 typedef enum {
-    CARRO,  
-    TRONCO   
+    COBRA,
+    TRONCO
 } TipoObstaculo;
 
 
 typedef struct Obstaculo {
-    int x, y;              
-    int ativo;              
-    int largura;           
-    int velocidade;         
-    int frameDelay;         
-    TipoObstaculo tipo;     
+    int x, y;
+    int ativo;
+    int largura;
+    int velocidade;
+    int frameDelay;
+    TipoObstaculo tipo;
 } Obstaculo;
 
 
@@ -26,8 +26,6 @@ Obstaculo* criarObstaculo(int y, TipoObstaculo tipo, int largura_max);
 
 
 void atualizarObstaculo(Obstaculo* o);
-
-
 void destruirObstaculo(Obstaculo* o);
 
 
